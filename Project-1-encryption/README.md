@@ -180,8 +180,10 @@ Decrypts the provided encrypted text.
 
 ## 📸 Screenshots
 
-> ![alt text](image-1.png)
-![alt text](image-2.png)
+> <img width="1900" height="958" alt="image" src="https://github.com/user-attachments/assets/9971c8b1-9953-492a-b659-c0992c10eb9a" />
+
+<img width="1892" height="973" alt="image" src="https://github.com/user-attachments/assets/23b8ce26-6f04-41a8-bbb9-b76b0e90c1a4" />
+
 
 ---
 
