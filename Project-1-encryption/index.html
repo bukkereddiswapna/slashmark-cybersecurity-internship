@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CipherBox — Text Encryption App</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- Background grid decoration -->
+  <div class="bg-grid"></div>
+  <div class="glow-orb orb1"></div>
+  <div class="glow-orb orb2"></div>
+
+  <div class="container">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">CipherBox</span>
+      </div>
+      <p class="tagline">AES-256-CBC · Secure Text Encryption & Decryption</p>
+    </header>
+
+    <!-- Info Bar -->
+    <div class="info-bar">
+      <span class="badge">🔒 AES-256-CBC</span>
+      <span class="badge">🎲 Random IV</span>
+      <span class="badge">🛡️ Secure Key</span>
+    </div>
+
+    <!-- Main Card -->
+    <main class="card">
+
+      <!-- Input Section -->
+      <section class="section">
+        <label class="label" for="inputText">
+          <span class="label-icon">📝</span> Input Text
+        </label>
+        <textarea
+          id="inputText"
+          class="textarea"
+          placeholder="Type your message here to encrypt...&#10;Or paste encrypted text here to decrypt..."
+          rows="5"
+        ></textarea>
+        <div class="char-count"><span id="charCount">0</span> characters</div>
+      </section>
+
+      <!-- Action Buttons -->
+      <section class="actions">
+        <button class="btn btn-encrypt" id="encryptBtn" onclick="handleEncrypt()">
+          <span class="btn-icon">🔐</span>
+          <span>Encrypt</span>
+        </button>
+        <button class="btn btn-decrypt" id="decryptBtn" onclick="handleDecrypt()">
+          <span class="btn-icon">🔓</span>
+          <span>Decrypt</span>
+        </button>
+        <button class="btn btn-clear" onclick="handleClear()">
+          <span class="btn-icon">🗑️</span>
+          <span>Clear</span>
+        </button>
+      </section>
+
+      <!-- Loading Spinner -->
+      <div class="loader" id="loader">
+        <div class="spinner"></div>
+        <span>Processing...</span>
+      </div>
+
+      <!-- Output Section -->
+      <section class="section" id="outputSection" style="display:none;">
+        <label class="label">
+          <span class="label-icon">✅</span> Output Result
+        </label>
+        <div class="output-box" id="outputBox"></div>
+        <div class="output-actions">
+          <button class="btn-copy" onclick="copyOutput()">📋 Copy to Clipboard</button>
+          <button class="btn-copy" onclick="useAsInput()">↩️ Use as Input</button>
+        </div>
+      </section>
+
+      <!-- Error Section -->
+      <div class="error-box" id="errorBox" style="display:none;"></div>
+
+    </main>
+
+    <!-- How it works Section -->
+    <section class="how-it-works">
+      <h3 class="how-title">⚙️ How It Works</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div class="step-text">
+            <strong>You type text</strong>
+            <span>Enter any message you want to protect</span>
+          </div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-text">
+            <strong>Random IV Generated</strong>
+            <span>Unique value ensures different output every time</span>
+          </div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div class="step-text">
+            <strong>AES-256 Encrypts</strong>
+            <span>Military-grade encryption secures your text</span>
+          </div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <div class="step-text">
+            <strong>Output: IV:CipherText</strong>
+            <span>Result is unreadable without the secret key</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Slashmark Internship — Task 1: Text Encryption Using Cryptographic Algorithms</p>
+    </footer>
+
+  </div>
+
+  <script>
+    // Character counter
+    const inputText = document.getElementById('inputText');
+    const charCount = document.getElementById('charCount');
+    inputText.addEventListener('input', () => {
+      charCount.textContent = inputText.value.length;
+    });
+
+    // Show/hide loader
+    function showLoader() {
+      document.getElementById('loader').style.display = 'flex';
+      document.getElementById('outputSection').style.display = 'none';
+      document.getElementById('errorBox').style.display = 'none';
+    }
+
+    function hideLoader() {
+      document.getElementById('loader').style.display = 'none';
+    }
+
+    // Show output
+    function showOutput(text) {
+      hideLoader();
+      const outputSection = document.getElementById('outputSection');
+      const outputBox = document.getElementById('outputBox');
+      outputBox.textContent = text;
+      outputSection.style.display = 'block';
+      outputSection.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Show error
+    function showError(message) {
+      hideLoader();
+      const errorBox = document.getElementById('errorBox');
+      errorBox.textContent = '⚠️ ' + message;
+      errorBox.style.display = 'block';
+    }
+
+    // Encrypt handler
+    async function handleEncrypt() {
+      const text = inputText.value.trim();
+      if (!text) {
+        showError('Please enter some text to encrypt.');
+        return;
+      }
+      showLoader();
+      try {
+        const response = await fetch('/encrypt', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text })
+        });
+        const data = await response.json();
+        if (data.error) {
+          showError(data.error);
+        } else {
+          showOutput(data.result);
+        }
+      } catch (err) {
+        showError('Something went wrong. Make sure the server is running.');
+      }
+    }
+
+    // Decrypt handler
+    async function handleDecrypt() {
+      const text = inputText.value.trim();
+      if (!text) {
+        showError('Please paste encrypted text to decrypt.');
+        return;
+      }
+      showLoader();
+      try {
+        const response = await fetch('/decrypt', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text })
+        });
+        const data = await response.json();
+        if (data.error) {
+          showError(data.error);
+        } else {
+          showOutput(data.result);
+        }
+      } catch (err) {
+        showError('Something went wrong. Make sure the server is running.');
+      }
+    }
+
+    // Clear handler
+    function handleClear() {
+      inputText.value = '';
+      charCount.textContent = '0';
+      document.getElementById('outputSection').style.display = 'none';
+      document.getElementById('errorBox').style.display = 'none';
+    }
+
+    // Copy to clipboard
+    function copyOutput() {
+      const text = document.getElementById('outputBox').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.querySelector('.btn-copy');
+        btn.textContent = '✅ Copied!';
+        setTimeout(() => { btn.textContent = '📋 Copy to Clipboard'; }, 2000);
+      });
+    }
+
+    // Use output as input
+    function useAsInput() {
+      const text = document.getElementById('outputBox').textContent;
+      inputText.value = text;
+      charCount.textContent = text.length;
+      document.getElementById('outputSection').style.display = 'none';
+      inputText.scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+
+</body>
+</html>

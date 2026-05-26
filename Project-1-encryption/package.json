@@ -1,0 +1,13 @@
+{
+  "name": "text-encryption-app",
+  "version": "1.0.0",
+  "description": "Text Encryption Using Cryptographic Algorithms - Slashmark Internship Task",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "express": "^4.18.0"
+  }
+}
