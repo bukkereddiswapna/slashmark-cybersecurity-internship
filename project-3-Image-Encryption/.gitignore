@@ -1,0 +1,5 @@
+key.txt
+encrypted_image.png
+decrypted_image.png
+__pycache__/
+*.pyc
