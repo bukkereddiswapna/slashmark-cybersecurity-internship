@@ -183,9 +183,10 @@ Step 5 → Open decrypted_image.png → original back! ✅
 
 ## 📸 Screenshots
 
-> *(Add screenshots of your running program here)*
+<img width="1181" height="611" alt="image" src="https://github.com/user-attachments/assets/6f72c97a-1efc-4c6c-a8c9-a6c5f6ff09d5" />
+<img width="1455" height="753" alt="image" src="https://github.com/user-attachments/assets/1afbde44-c47e-4d40-95e4-ddf542f6c237" />
+<img width="1466" height="711" alt="image" src="https://github.com/user-attachments/assets/4a794845-222a-4c71-8dad-97fb8f2ede50" />
 
----
 
 ## 👤 Author
 
