@@ -154,9 +154,10 @@ node viewer.js
 
 ## 📸 Screenshots
 
-> *(Add screenshots of your running program here)*
+<img width="1378" height="748" alt="image" src="https://github.com/user-attachments/assets/b9a1b5a6-af24-409d-9c27-49f39da8b902" />
+<img width="1357" height="941" alt="image" src="https://github.com/user-attachments/assets/a0331ecc-5d39-4325-b445-c3955d268a8f" />
 
----
+<img width="949" height="890" alt="image" src="https://github.com/user-attachments/assets/e8052a6e-cc54-46a9-97d8-e86322e2ca73" />
 
 ## 👤 Author
 
